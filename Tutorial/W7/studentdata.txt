@@ -1,0 +1,36 @@
+STUDENT
+
+stu_nbr     stu_lname   stu_fname   stu_dob
+11111111    Bloggs      Fred        1-Jan-2003
+11111112    Nice        Nick        10-Oct-2004
+11111113    Wheat       Wendy       5-May-2005
+11111114    Sheen       Cindy       25-Dec-2004
+
+UNIT
+
+unit_code   unit_name
+FIT9999     FIT Last Unit
+FIT9132     Introduction to Databases
+FIT9161     Project
+FIT5111     Student's Life
+
+ENROLMENT
+
+stu_nbr     unit_code   enrol_year  enrol_semester  enrol_mark  enrol_grade
+11111111    FIT9132     2020        1               35          N
+11111111    FIT9161     2020        1               61          C
+11111111    FIT9132     2020        2               42          N
+11111111    FIT5111     2020        2               76          D
+11111111    FIT9132     2021        1                           
+11111112    FIT9132     2020        2               83          HD
+11111112    FIT9161     2020        2               79          D
+11111113    FIT9132     2021        1       
+11111113    FIT5111     2021        1       
+11111114    FIT9132     2021        1   
+11111114    FIT5111     2021        1  
+
+
+
+
+
+
