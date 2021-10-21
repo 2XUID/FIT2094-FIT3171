@@ -20,7 +20,7 @@ FROM
 ORDER BY
     unitcode;
 
-/* A2. List all students’ details who live in Caulfield. 
+/* A2. List all students’ details who live in Caulfield.
 Order the output by student first name.*/
 
 SELECT
@@ -73,7 +73,7 @@ SELECT
 FROM
     uni.offering
 WHERE
-    to_char(ofyear, 'yyyy') = '2019'
+    TO_CHAR(ofyear, 'yyyy') = '2019'
 ORDER BY
     unitcode, semester;
   
@@ -83,12 +83,12 @@ in either semester 1 of 2019 or semester 1 of 2020.
 Order the output by year and semester then by unit code.*/
 
 SELECT
-    to_char(ofyear, 'yyyy') as year, semester, unitcode
+    TO_CHAR(ofyear, 'yyyy') as year, semester, unitcode
 FROM
     uni.offering
 WHERE
     semester = 1
-    AND ((to_char(ofyear, 'yyyy') = '2019') OR (to_char(ofyear, 'yyyy') = '2020'))
+    AND ((TO_CHAR(ofyear, 'yyyy') = '2019') OR (TO_CHAR(ofyear, 'yyyy') = '2020'))
 ORDER BY
     year, semester, unitcode;
 
@@ -106,7 +106,7 @@ FROM
 WHERE
     mark < 50
     AND semester = 2
-    AND to_char(ofyear, 'yyyy') = '2019'
+    AND TO_CHAR(ofyear, 'yyyy') = '2019'
 ORDER BY
     studid,
     unitcode;
@@ -123,7 +123,7 @@ FROM
 WHERE
     grade = 'N'
     AND semester = 2
-    AND to_char(ofyear, 'yyyy') = '2019'
+    AND TO_CHAR(ofyear, 'yyyy') = '2019'
 ORDER BY
     studid,
     unitcode;

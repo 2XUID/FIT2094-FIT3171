@@ -24,7 +24,7 @@ FROM
     uni.offering   o
     JOIN uni.staff      s ON o.chiefexam = s.staffid
 WHERE
-    to_char(ofyear, 'yyyy') = '2020'
+    TO_CHAR(ofyear, 'yyyy') = '2020'
 ORDER BY
     semester, o.unitcode;
 
@@ -36,7 +36,7 @@ Order the output by unit code then by offering year and then semester. */
 SELECT
     u.unitcode,
     unitname,
-    to_char(ofyear, 'yyyy') AS offeringyr,
+    TO_CHAR(ofyear, 'yyyy') AS offeringyr,
     semester
 FROM
     uni.unit       u
@@ -60,7 +60,7 @@ FROM
     JOIN uni.unit        u ON e.unitcode = u.unitcode
 WHERE 
     e.semester = 1
-    and to_char(ofyear,'yyyy') = '2020'
+    and TO_CHAR(ofyear,'yyyy') = '2020'
 ORDER BY
     unitname,
     s.studid;
@@ -75,12 +75,12 @@ SELECT
     semester,
     cltype,
     clday,
-    to_char(cltime, 'HHAM') AS time
+    TO_CHAR(cltime, 'HHAM') AS time
 FROM
     uni.staff        s
     JOIN uni.schedclass   sc ON s.staffid = sc.staffid
 WHERE
-    to_char(ofyear, 'yyyy') = '2020'
+    TO_CHAR(ofyear, 'yyyy') = '2020'
     AND stafffname = 'Windham'
     AND stafflname = 'Ellard'
 ORDER BY
@@ -95,8 +95,8 @@ SELECT
     e.unitcode,
     unitname,
     semester,
-    to_char(ofyear, 'yyyy') AS "YEAR OF ENROLMENT",
-    nvl(to_char(mark, '999'), 'N/A') AS mark,
+    TO_CHAR(ofyear, 'yyyy') AS "YEAR OF ENROLMENT",
+    nvl(TO_CHAR(mark, '999'), 'N/A') AS mark,
     nvl(grade, 'N/A') AS grade
 FROM
     uni.student     s
@@ -141,7 +141,7 @@ WHERE
     mark >= 80
     AND unitcode = 'FIT2094'
     AND semester = 2
-    AND to_char(ofyear, 'yyyy') = '2019'
+    AND TO_CHAR(ofyear, 'yyyy') = '2019'
 ORDER BY
     s.studid;
 
@@ -159,5 +159,5 @@ FROM
 WHERE
     mark IS NULL
     AND semester = 1
-    AND to_char(ofyear, 'yyyy') = '2020'
+    AND TO_CHAR(ofyear, 'yyyy') = '2020'
 order by student_full_name;
