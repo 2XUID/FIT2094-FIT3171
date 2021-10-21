@@ -1,3 +1,20 @@
+--****PLEASE ENTER YOUR DETAILS BELOW****
+--cgh_queries.sql
+
+--Student ID: 30874157
+--Student Name: Rui Qin
+--Tutorial No: 02
+
+/* Comments for your marker:
+
+
+
+
+*/
+
+
+
+
 /*
     Q1. List the doctor title, first name, last name and contact phone number for all doctors who specialise
 in the area of "ORTHOPEDIC SURGERY" (this is the specialisation description). Order the list by
