@@ -15,23 +15,48 @@ Do not remove this notice.
 
 --9.2.1 UPDATE
 /*1. Update the unit name of FIT9999 from 'FIT Last Unit' to 'place holder unit'.*/
-select * from unit;
+SELECT
+    *
+FROM
+    unit;
 
-update unit set unit_name = 'place holder unit' where unit_code = 'FIT9999';
-commit;
+UPDATE unit
+SET
+    unit_name = 'place holder unit'
+WHERE
+    unit_code = 'FIT9999';
 
-select * from unit;
+COMMIT;
+
+SELECT
+    *
+FROM
+    unit;
 
 /*2. Enter the mark and grade for the student with the student number of 11111113 
 for the unit code FIT9132 that the student enrolled in semester 1 of 2021. 
 The mark is 75 and the grade is D.*/
-select * from enrolment;
+SELECT
+    *
+FROM
+    enrolment;
 
-update enrolment set enrol_mark = 75, enrol_grade = 'D' where stu_nbr = 11111113 
-    and enrol_semester = '1'  and enrol_year = 2021 and unit_code='FIT9132';
-commit;
+UPDATE enrolment
+SET
+    enrol_mark = 75,
+    enrol_grade = 'D'
+WHERE
+        stu_nbr = 11111113
+    AND enrol_semester = '1'
+    AND enrol_year = 2021
+    AND unit_code = 'FIT9132';
 
-select * from enrolment;
+COMMIT;
+
+SELECT
+    *
+FROM
+    enrolment;
 
 /*3. The university introduced a new grade classification scale. 
 The new classification are:
@@ -44,30 +69,79 @@ The new classification are:
 Change the database to reflect the new grade classification scale.
 */
 
-select * from enrolment;
+SELECT
+    *
+FROM
+    enrolment;
 
-update enrolment set enrol_grade = 'N' where enrol_mark >= 0 and enrol_mark <= 44;
-update enrolment set enrol_grade = 'P1' where enrol_mark >= 45 and enrol_mark <= 54;
-update enrolment set enrol_grade = 'P2' where enrol_mark >= 55 and enrol_mark <= 64;
-update enrolment set enrol_grade = 'C' where enrol_mark >= 65 and enrol_mark <= 74;
-update enrolment set enrol_grade = 'D' where enrol_mark >= 75 and enrol_mark <= 84;
-update enrolment set enrol_grade = 'HD' where enrol_mark >= 85;
-commit;
+UPDATE enrolment
+SET
+    enrol_grade = 'N'
+WHERE
+        enrol_mark >= 0
+    AND enrol_mark <= 44;
+
+UPDATE enrolment
+SET
+    enrol_grade = 'P1'
+WHERE
+        enrol_mark >= 45
+    AND enrol_mark <= 54;
+
+UPDATE enrolment
+SET
+    enrol_grade = 'P2'
+WHERE
+        enrol_mark >= 55
+    AND enrol_mark <= 64;
+
+UPDATE enrolment
+SET
+    enrol_grade = 'C'
+WHERE
+        enrol_mark >= 65
+    AND enrol_mark <= 74;
+
+UPDATE enrolment
+SET
+    enrol_grade = 'D'
+WHERE
+        enrol_mark >= 75
+    AND enrol_mark <= 84;
+
+UPDATE enrolment
+SET
+    enrol_grade = 'HD'
+WHERE
+    enrol_mark >= 85;
+
+COMMIT;
 
 --Alternative solution for Q3
-update enrolment 
-set enrol_grade = 
-CASE
-when enrol_mark between 0 and 44 then 'N'
-when enrol_mark between 45 and 54 then 'P1'
-when enrol_mark between 55 and 64 then 'P2'
-when enrol_mark between 65 and 74 then 'C'
-when enrol_mark between 75 and 84 then 'D'
-when enrol_mark between 85 and 100 then 'HD'
-END;
-commit;
+UPDATE enrolment
+SET
+    enrol_grade =
+        CASE
+            WHEN enrol_mark BETWEEN 0 AND 44    THEN
+                'N'
+            WHEN enrol_mark BETWEEN 45 AND 54   THEN
+                'P1'
+            WHEN enrol_mark BETWEEN 55 AND 64   THEN
+                'P2'
+            WHEN enrol_mark BETWEEN 65 AND 74   THEN
+                'C'
+            WHEN enrol_mark BETWEEN 75 AND 84   THEN
+                'D'
+            WHEN enrol_mark BETWEEN 85 AND 100  THEN
+                'HD'
+        END;
 
-select * from enrolment;
+COMMIT;
+
+SELECT
+    *
+FROM
+    enrolment;
 
 /*4. Due to the new regulation, the Faculty of IT decided to change 'Project' unit code 
 from FIT9161 into FIT5161. Change the database to reflect this situation.
@@ -75,109 +149,210 @@ Note: you need to disable the FK constraint before you do the modification
 then enable the FK to have it active again.
 */
 
-select * from unit;
-select * from enrolment;
+SELECT
+    *
+FROM
+    unit;
 
-/* A direct update statement on unit table will return error 
+SELECT
+    *
+FROM
+    enrolment;
+
+/* A direct update statement on unit table will return error
 "integrity constraint (AAA.STUDENT_ENROLMENT_FK) violated - child record found".
 
-Thus, you need to use the ALTER TABLE statement to disable 
+Thus, you need to use the ALTER TABLE statement to disable
 the FOREIGN KEY constraint first and then enable it back.*/
 
-alter table enrolment disable constraint unit_enrolment_fk;
+ALTER TABLE enrolment DISABLE CONSTRAINT unit_enrolment_fk;
 
-update enrolment
-set unit_code = 'FIT5161'
-where unit_code = 'FIT9161';
+UPDATE enrolment
+SET
+    unit_code = 'FIT5161'
+WHERE
+    unit_code = 'FIT9161';
 
-update unit
-set unit_code = 'FIT5161'
-where unit_code = 'FIT9161';
+UPDATE unit
+SET
+    unit_code = 'FIT5161'
+WHERE
+    unit_code = 'FIT9161';
 
-commit;
+COMMIT;
 
-ALTER TABLE enrolment enable constraint unit_enrolment_fk;
+ALTER TABLE enrolment ENABLE CONSTRAINT unit_enrolment_fk;
 
-select * from unit;
-select * from enrolment;
+SELECT
+    *
+FROM
+    unit;
+
+SELECT
+    *
+FROM
+    enrolment;
 
 
 --9.2.2 DELETE
-/*1. A student with student number 11111114 has taken intermission in semester 1 2021, 
-hence all the enrolment of this student for semester 1 2021 should be removed. 
+/*1. A student with student number 11111114 has taken intermission in semester 1 2021,
+hence all the enrolment of this student for semester 1 2021 should be removed.
 Change the database to reflect this situation.*/
-select * from enrolment;
+SELECT
+    *
+FROM
+    enrolment;
 
-delete from enrolment where stu_nbr = 11111114 and enrol_semester = '1' and enrol_year = 2021;
-commit;
+DELETE FROM enrolment
+WHERE
+        stu_nbr = 11111114
+    AND enrol_semester = '1'
+    AND enrol_year = 2021;
 
-select * from enrolment;
+COMMIT;
+
+SELECT
+    *
+FROM
+    enrolment;
 
 
 /*2. The faculty decided to remove all 'Student's Life' unit's enrolments. 
 Change the database to reflect this situation.
 Note: unit names are unique in the database.*/
 
-select * from enrolment;
+SELECT
+    *
+FROM
+    enrolment;
 
-delete from enrolment 
-where unit_code = 
-    (select unit_code 
-     from unit 
-     where unit_name = 'Student''s Life');
-     
-commit;
+DELETE FROM enrolment
+WHERE
+    unit_code = (
+        SELECT
+            unit_code
+        FROM
+            unit
+        WHERE
+            unit_name = 'Student''s Life'
+    );
 
-select * from enrolment;
+COMMIT;
+
+SELECT
+    *
+FROM
+    enrolment;
 
 
 /*3. Assume that Wendy Wheat (student number 11111113) has withdrawn from the university. 
 Remove her details from the database.*/
-select * from student;
-select * from enrolment;
+SELECT
+    *
+FROM
+    student;
+
+SELECT
+    *
+FROM
+    enrolment;
 
  
 -- this statement will return error "integrity constraint (AAA.STUDENT_ENROLMENT_FK) violated - child record found"
-delete from student where stu_nbr = 11111113;
+DELETE FROM student
+WHERE
+    stu_nbr = 11111113;
 
 -- so, child records need to be deleted first and then the parent record:
-delete from enrolment where stu_nbr = 11111113;
-delete from student where stu_nbr = 11111113;
-commit;
+DELETE FROM enrolment
+WHERE
+    stu_nbr = 11111113;
 
-select * from student;
-select * from enrolment;
+DELETE FROM student
+WHERE
+    stu_nbr = 11111113;
 
-/*4 Add Wendy Wheat back to the database (use the INSERT statements you have created 
+COMMIT;
+
+SELECT
+    *
+FROM
+    student;
+
+SELECT
+    *
+FROM
+    enrolment;
+/*4 Add Wendy Wheat back to the database (use the INSERT statements you have created
 when completing module Tutorial 7 SQL Data Definition Language DDL).*/
-insert into student values (11111113,'Wheat','Wendy','05-May-2005');
-insert into enrolment values (11111113,'FIT9132',2021,'1',null,null);
-insert into enrolment values (11111113,'FIT5111',2021,'1',null,null);
-commit;
+INSERT INTO student VALUES (
+    11111113,
+    'Wheat',
+    'Wendy',
+    '05-May-2005'
+);
 
-select * from student;
-select * from enrolment;
+INSERT INTO enrolment VALUES (
+    11111113,
+    'FIT9132',
+    2021,
+    '1',
+    NULL,
+    NULL
+);
+
+INSERT INTO enrolment VALUES (
+    11111113,
+    'FIT5111',
+    2021,
+    '1',
+    NULL,
+    NULL
+);
+
+COMMIT;
+
+SELECT
+    *
+FROM
+    student;
+
+SELECT
+    *
+FROM
+    enrolment;
 
 /*Change the FOREIGN KEY constraints definition for the STUDENT table so it will now include 
 the ON DELETE clause to allow CASCADE delete. Hint: You need to use the ALTER TABLE statement
  to drop the FOREIGN KEY constraint first and then put it back 
  using ALTER TABLE with the ADD CONSTRAINT clause. */
 -- drop the constraint
-alter table enrolment drop constraint STUDENT_ENROLMENT_FK;
+ALTER TABLE enrolment DROP CONSTRAINT student_enrolment_fk;
 -- add the constraint back but now as delete cascade
-alter table enrolment add constraint STUDENT_ENROLMENT_FK 
-  foreign key (stu_nbr) references student (stu_nbr) on delete cascade;
-  
+ALTER TABLE enrolment
+    ADD CONSTRAINT student_enrolment_fk FOREIGN KEY ( stu_nbr )
+        REFERENCES student ( stu_nbr )
+            ON DELETE CASCADE;
 /*
-Once you have changed the table, now, perform the deletion of 
-the Wendy Wheat (student number 11111113) row in the STUDENT table. 
+Once you have changed the table, now, perform the deletion of
+the Wendy Wheat (student number 11111113) row in the STUDENT table.
 Examine the ENROLMENT table. What happens to the enrolment records of Wendy Wheat?*/
 
 -- delete Wendy Wheat
-delete from student where stu_nbr = 11111113;
-commit;
+DELETE FROM student
+WHERE
+    stu_nbr = 11111113;
 
-select * from student;
-select * from enrolment;
+COMMIT;
+
+SELECT
+    *
+FROM
+    student;
+
+SELECT
+    *
+FROM
+    enrolment;
 
 SET ECHO OFF;
