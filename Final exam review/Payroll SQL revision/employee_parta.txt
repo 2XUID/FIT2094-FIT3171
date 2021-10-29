@@ -1,0 +1,692 @@
+SQL> 
+SQL> --
+SQL> -- PART A PAYROLL REVISION
+SQL> -- 
+SQL> 
+SQL> --
+SQL> -- Q1. Display the full details of employees who earn less than $1000.
+SQL> SELECT
+  2      empno,
+  3      empname,
+  4      empinit,
+  5      empjob,
+  6      to_char(empbdate,'dd Mon yyyy'),
+  7      empmsal,
+  8      empcomm,
+  9      deptno,
+ 10      mgrno
+ 11  FROM
+ 12      payroll.employee
+ 13  WHERE
+ 14      empmsal < 1000
+ 15  ORDER BY
+ 16      empno;
+
+     EMPNO EMPNAME  EMPIN EMPJOB   TO_CHAR(EMPBDATE,'DD    EMPMSAL    EMPCOMM     DEPTNO      MGRNO
+---------- -------- ----- -------- -------------------- ---------- ---------- ---------- ----------
+      7369 SMITH    N     TRAINER  17 Dec 1982                 800                    20       7902
+      7900 JONES    R     ADMIN    03 Dec 1986                 800                    30       7698
+
+SQL> 
+SQL> --        
+SQL> -- Q2. List the department number of departments that have employees.
+SQL> 
+SQL> SELECT DISTINCT
+  2      deptno
+  3  FROM
+  4      payroll.employee
+  5  ORDER BY deptno;
+
+    DEPTNO
+----------
+        10
+        20
+        30
+
+SQL> 
+SQL> --
+SQL> -- Q3. Display the full details of trainers (employee job is TRAINER) who earn 
+SQL> -- less than 2500 each month and are working in department 20.
+SQL> 
+SQL> SELECT
+  2      empno,
+  3      empname,
+  4      empinit,
+  5      empjob,
+  6      to_char(empbdate,'dd Mon yyyy'),
+  7      empmsal,
+  8      empcomm,
+  9      deptno,
+ 10      mgrno
+ 11  FROM
+ 12      payroll.employee
+ 13  WHERE
+ 14      upper(empjob) = 'TRAINER'
+ 15      AND empmsal < 2500
+ 16      AND deptno = 20
+ 17  ORDER BY
+ 18      empno;
+
+     EMPNO EMPNAME  EMPIN EMPJOB   TO_CHAR(EMPBDATE,'DD    EMPMSAL    EMPCOMM     DEPTNO      MGRNO
+---------- -------- ----- -------- -------------------- ---------- ---------- ---------- ----------
+      7369 SMITH    N     TRAINER  17 Dec 1982                 800                    20       7902
+      7876 ADAMS    AA    TRAINER  30 Dec 1983                1100                    20       7788
+
+SQL> 
+SQL> --
+SQL> -- Q4. Display the name,job,monthly salary and commission of employees whose monthly salary is higher 
+SQL> -- than their commission. Rename the columns: Name, Job, Monthly Salary and Commission.
+SQL> 
+SQL> SELECT
+  2      empname AS "Name",
+  3      empjob AS "Job",
+  4      empmsal AS "Monthly Salary",
+  5      empcomm AS "Commission"
+  6  FROM
+  7      payroll.employee
+  8  WHERE
+  9      empmsal > empcomm
+ 10  ORDER BY empname;
+
+Name     Job      Monthly Salary Commission
+-------- -------- -------------- ----------
+ALLEN    SALESREP           1600        300
+TURNER   SALESREP           1500          0
+WARD     SALESREP           1250        500
+
+SQL> 
+SQL> --
+SQL> -- Q5. Display the name and job of employees whose job ends with the letter R.
+SQL> 
+SQL> SELECT
+  2      empname,
+  3      empjob
+  4  FROM
+  5      payroll.employee
+  6  WHERE
+  7      upper(empjob) LIKE '%R'
+  8  ORDER BY empname;
+
+EMPNAME  EMPJOB  
+-------- --------
+ADAMS    TRAINER 
+BLAKE    MANAGER 
+CLARK    MANAGER 
+FORD     TRAINER 
+JONES    MANAGER 
+KING     DIRECTOR
+SCOTT    TRAINER 
+SMITH    TRAINER 
+
+8 rows selected. 
+
+SQL> 
+SQL> --
+SQL> -- Q6. Display the name and job of employees that have a name starting with 'J','K' or 'M'.
+SQL> 
+SQL> SELECT
+  2      empname,
+  3      empjob
+  4  FROM
+  5      payroll.employee
+  6  WHERE
+  7          upper(empname) LIKE 'J%'
+  8      OR
+  9          upper(empname) LIKE 'K%'
+ 10      OR
+ 11          upper(empname) LIKE 'M%'
+ 12  ORDER BY empname;
+
+EMPNAME  EMPJOB  
+-------- --------
+JONES    MANAGER 
+JONES    ADMIN   
+KING     DIRECTOR
+MARTIN   SALESREP
+MILLER   ADMIN   
+
+SQL> 
+SQL> --
+SQL> -- Q7. Display the employees who were born before 1990 and earn more than 1500 each month.
+SQL> 
+SQL> 
+SQL> SELECT
+  2      empname,
+  3      empjob,
+  4      to_char(empbdate,'Dd-Mon-YYYY') as BIRTHDATE,
+  5      empmsal
+  6  FROM
+  7      payroll.employee
+  8  WHERE
+  9          empbdate < TO_DATE('01-JAN-1990','dd-MON-YYYY')
+ 10      AND
+ 11          empmsal > 1500
+ 12  ORDER BY empname;
+
+EMPNAME  EMPJOB   BIRTHDATE               EMPMSAL
+-------- -------- -------------------- ----------
+ALLEN    SALESREP 20-Feb-1978                1600
+BLAKE    MANAGER  01-Nov-1980                2850
+CLARK    MANAGER  09-Jun-1982                2450
+FORD     TRAINER  13-Feb-1976                3000
+JONES    MANAGER  02-Apr-1984                2975
+KING     DIRECTOR 17-Nov-1969                5000
+SCOTT    TRAINER  26-Nov-1976                3000
+
+7 rows selected. 
+
+SQL> 
+SQL> --
+SQL> -- Q8. Display the name, job, date of birth and salary of employees that don't have a commission.
+SQL> 
+SQL> SELECT
+  2      empname,
+  3      empjob,
+  4      to_char(empbdate,'Dd-Mon-YYYY') as BIRTHDATE,
+  5      empmsal
+  6  FROM
+  7      payroll.employee
+  8  WHERE
+  9      empcomm IS NULL
+ 10  ORDER BY empname;
+
+EMPNAME  EMPJOB   BIRTHDATE               EMPMSAL
+-------- -------- -------------------- ----------
+ADAMS    TRAINER  30-Dec-1983                1100
+BLAKE    MANAGER  01-Nov-1980                2850
+CLARK    MANAGER  09-Jun-1982                2450
+FORD     TRAINER  13-Feb-1976                3000
+JONES    ADMIN    03-Dec-1986                 800
+JONES    MANAGER  02-Apr-1984                2975
+KING     DIRECTOR 17-Nov-1969                5000
+MILLER   ADMIN    23-Jan-1979                1300
+SCOTT    TRAINER  26-Nov-1976                3000
+SMITH    TRAINER  17-Dec-1982                 800
+
+10 rows selected. 
+
+SQL> 
+SQL> --
+SQL> -- Q9. Display the employee name, job, department name, location and monthly salary 
+SQL> -- of employees that work in NEW YORK.
+SQL> 
+SQL> SELECT
+  2      e.empname,
+  3      e.empjob,
+  4      d.deptname,
+  5      d.deptlocation,
+  6      e.empmsal
+  7  FROM
+  8      payroll.employee e join payroll.department d on e.deptno = d.deptno
+  9  WHERE
+ 10      upper(d.deptlocation) = 'NEW YORK'
+ 11  ORDER BY e.empname;
+
+EMPNAME  EMPJOB   DEPTNAME   DEPTLOCA    EMPMSAL
+-------- -------- ---------- -------- ----------
+CLARK    MANAGER  ACCOUNTING NEW YORK       2450
+KING     DIRECTOR ACCOUNTING NEW YORK       5000
+MILLER   ADMIN    ACCOUNTING NEW YORK       1300
+
+SQL> 
+SQL> --
+SQL> -- Q10. Display the name and job of employees who do not work in NEW YORK or CHICAGO.
+SQL> 
+SQL> SELECT
+  2      e.empname,
+  3      e.empjob,
+  4      d.deptname,
+  5      d.deptlocation
+  6  FROM
+  7      payroll.employee e join payroll.department d on e.deptno = d.deptno
+  8  WHERE
+  9          upper(d.deptlocation) NOT IN (
+ 10              'NEW YORK','CHICAGO'
+ 11          )
+ 12  ORDER BY e.empname;
+
+EMPNAME  EMPJOB   DEPTNAME   DEPTLOCA
+-------- -------- ---------- --------
+ADAMS    TRAINER  TRAINING   DALLAS  
+FORD     TRAINER  TRAINING   DALLAS  
+JONES    MANAGER  TRAINING   DALLAS  
+SCOTT    TRAINER  TRAINING   DALLAS  
+SMITH    TRAINER  TRAINING   DALLAS  
+
+SQL> 
+SQL> --
+SQL> -- Q11. Display the name, job, date of birth and salary of employees who were born 
+SQL> -- in the first half of the 70s. Display the output in birth date order.
+SQL> 
+SQL> SELECT
+  2      empname,
+  3      empjob,
+  4      to_char(empbdate,'Dd-Mon-YYYY') as BIRTHDATE,
+  5      empmsal
+  6  FROM
+  7      payroll.employee
+  8  WHERE
+  9      empbdate BETWEEN TO_DATE('01-JAN-1970','DD-MON-YYYY') AND TO_DATE('31-DEC-1974','DD-MON-YYYY')
+ 10  ORDER BY empbdate;
+
+EMPNAME  EMPJOB   BIRTHDATE               EMPMSAL
+-------- -------- -------------------- ----------
+MARTIN   SALESREP 28-Sep-1973                1250
+
+SQL> 
+SQL> --
+SQL> -- Q12. Display the name, job and salary of employees who earn less than 1500 or greater than 3000 per month.
+SQL> 
+SQL> SELECT
+  2      empname,
+  3      empjob,
+  4      empmsal
+  5  FROM
+  6      payroll.employee
+  7  WHERE
+  8      empmsal NOT BETWEEN 1500 AND 3000
+  9  ORDER BY empname;
+
+EMPNAME  EMPJOB      EMPMSAL
+-------- -------- ----------
+ADAMS    TRAINER        1100
+JONES    ADMIN           800
+KING     DIRECTOR       5000
+MARTIN   SALESREP       1250
+MILLER   ADMIN          1300
+SMITH    TRAINER         800
+WARD     SALESREP       1250
+
+7 rows selected. 
+
+SQL> 
+SQL> --
+SQL> -- Q13. Display the name, job and manger number of employees who have a manager.
+SQL> 
+SQL> SELECT
+  2      empname,
+  3      empjob,
+  4      mgrno
+  5  FROM
+  6      payroll.employee
+  7  WHERE
+  8      mgrno IS NOT NULL
+  9  ORDER BY empname;
+
+EMPNAME  EMPJOB        MGRNO
+-------- -------- ----------
+ADAMS    TRAINER        7788
+ALLEN    SALESREP       7698
+BLAKE    MANAGER        7839
+CLARK    MANAGER        7839
+FORD     TRAINER        7566
+JONES    MANAGER        7839
+JONES    ADMIN          7698
+MARTIN   SALESREP       7698
+MILLER   ADMIN          7782
+SCOTT    TRAINER        7566
+SMITH    TRAINER        7902
+TURNER   SALESREP       7698
+WARD     SALESREP       7698
+
+13 rows selected. 
+
+SQL> 
+SQL> --
+SQL> -- Q14. Display the name, job, department name, department location and salary of 
+SQL> -- employees who either work in DALLAS or as a MANAGER, and earn more than 2500.
+SQL> 
+SQL> SELECT
+  2      e.empname,
+  3      e.empjob,
+  4      d.deptname,
+  5      d.deptlocation,
+  6      e.empmsal
+  7  FROM
+  8      payroll.employee e
+  9      JOIN payroll.department d ON (
+ 10          e.deptno = d.deptno
+ 11      )
+ 12  WHERE
+ 13      (
+ 14              upper(d.deptlocation) = 'DALLAS'
+ 15          OR
+ 16              upper(e.empjob) = 'MANAGER'
+ 17      ) AND
+ 18          e.empmsal > 2500
+ 19  ORDER BY e.empname;
+
+EMPNAME  EMPJOB   DEPTNAME   DEPTLOCA    EMPMSAL
+-------- -------- ---------- -------- ----------
+BLAKE    MANAGER  SALES      CHICAGO        2850
+FORD     TRAINER  TRAINING   DALLAS         3000
+JONES    MANAGER  TRAINING   DALLAS         2975
+SCOTT    TRAINER  TRAINING   DALLAS         3000
+
+SQL> 
+SQL> --
+SQL> -- Q15. Display the name,job,monthly salary and salary grade of all employees. Display 
+SQL> -- the list in monthly salary order within salary grade order.
+SQL> 
+SQL> SELECT
+  2      e.empname,
+  3      e.empjob,
+  4      e.empmsal,
+  5      s.salgrade
+  6  FROM
+  7      payroll.employee e,
+  8      payroll.salgrade s
+  9  WHERE
+ 10      e.empmsal BETWEEN s.sallower AND s.salupper
+ 11  ORDER BY
+ 12      s.salgrade,
+ 13      e.empmsal;
+
+EMPNAME  EMPJOB      EMPMSAL   SALGRADE
+-------- -------- ---------- ----------
+JONES    ADMIN           800          1
+SMITH    TRAINER         800          1
+ADAMS    TRAINER        1100          1
+WARD     SALESREP       1250          2
+MARTIN   SALESREP       1250          2
+MILLER   ADMIN          1300          2
+TURNER   SALESREP       1500          3
+ALLEN    SALESREP       1600          3
+CLARK    MANAGER        2450          4
+BLAKE    MANAGER        2850          4
+JONES    MANAGER        2975          4
+FORD     TRAINER        3000          4
+SCOTT    TRAINER        3000          4
+KING     DIRECTOR       5000          5
+
+14 rows selected. 
+
+SQL> -- OR    
+SQL> 
+SQL> SELECT
+  2      e.empname,
+  3      e.empjob,
+  4      e.empmsal,
+  5      s.salgrade
+  6  FROM
+  7      payroll.employee e
+  8      JOIN payroll.salgrade s ON (
+  9          e.empmsal BETWEEN s.sallower AND s.salupper
+ 10      )
+ 11  ORDER BY
+ 12      s.salgrade,
+ 13      e.empmsal;
+
+EMPNAME  EMPJOB      EMPMSAL   SALGRADE
+-------- -------- ---------- ----------
+JONES    ADMIN           800          1
+SMITH    TRAINER         800          1
+ADAMS    TRAINER        1100          1
+WARD     SALESREP       1250          2
+MARTIN   SALESREP       1250          2
+MILLER   ADMIN          1300          2
+TURNER   SALESREP       1500          3
+ALLEN    SALESREP       1600          3
+CLARK    MANAGER        2450          4
+BLAKE    MANAGER        2850          4
+JONES    MANAGER        2975          4
+FORD     TRAINER        3000          4
+SCOTT    TRAINER        3000          4
+KING     DIRECTOR       5000          5
+
+14 rows selected. 
+
+SQL> 
+SQL> --
+SQL> -- Q16. Display the name and location of all departments,and the name of their employees. 
+SQL> -- Display the output in employee name order within department name order.
+SQL> 
+SQL> SELECT
+  2      d.deptname,
+  3      d.deptlocation,
+  4      e.empname
+  5  FROM
+  6      payroll.employee e
+  7      RIGHT OUTER JOIN payroll.department d ON (
+  8          e.deptno = d.deptno
+  9      )
+ 10  ORDER BY
+ 11      d.deptname,
+ 12      e.empname;
+
+DEPTNAME   DEPTLOCA EMPNAME 
+---------- -------- --------
+ACCOUNTING NEW YORK CLARK   
+ACCOUNTING NEW YORK KING    
+ACCOUNTING NEW YORK MILLER  
+HR         BOSTON           
+SALES      CHICAGO  ALLEN   
+SALES      CHICAGO  BLAKE   
+SALES      CHICAGO  JONES   
+SALES      CHICAGO  MARTIN  
+SALES      CHICAGO  TURNER  
+SALES      CHICAGO  WARD    
+TRAINING   DALLAS   ADAMS   
+TRAINING   DALLAS   FORD    
+TRAINING   DALLAS   JONES   
+TRAINING   DALLAS   SCOTT   
+TRAINING   DALLAS   SMITH   
+
+15 rows selected. 
+
+SQL> 
+SQL> --
+SQL> -- Q17. Display the name of all employees,their job and the name of their manager. 
+SQL> -- List the output in employee name order within manager name order.
+SQL> 
+SQL> SELECT
+  2      e.empname "Employee",
+  3      e.empjob AS "Emp Job",
+  4      m.empname AS "Manager"
+  5  FROM
+  6      payroll.employee e
+  7      LEFT OUTER JOIN payroll.employee m ON (
+  8          e.mgrno = m.empno
+  9      )
+ 10  ORDER BY
+ 11      m.empname,
+ 12      e.empname;
+
+Employee Emp Job  Manager 
+-------- -------- --------
+ALLEN    SALESREP BLAKE   
+JONES    ADMIN    BLAKE   
+MARTIN   SALESREP BLAKE   
+TURNER   SALESREP BLAKE   
+WARD     SALESREP BLAKE   
+MILLER   ADMIN    CLARK   
+SMITH    TRAINER  FORD    
+FORD     TRAINER  JONES   
+SCOTT    TRAINER  JONES   
+BLAKE    MANAGER  KING    
+CLARK    MANAGER  KING    
+JONES    MANAGER  KING    
+ADAMS    TRAINER  SCOTT   
+KING     DIRECTOR         
+
+14 rows selected. 
+
+SQL> -- here NVL(m.empname,'NA') could be used to display a value rather than leave the 
+SQL> -- managers name null for the director
+SQL> 
+SQL> --
+SQL> -- Q18. For each employee display their employment history. In the listing include 
+SQL> -- the employees' name,the name of the department they worked for,the begin and end 
+SQL> -- date and their monthly salary. Display the output in begin date order (most recent at the 
+SQL> -- top of the list) within employee name order.
+SQL> 
+SQL> SELECT
+  2      e.empname,
+  3      d.deptname,
+  4      to_char(histbegindate,'DD-Mon-YYY') as HISTBEGIN,
+  5      to_char(histenddate,'Dd-Mon-YYYY') as HISTEND,
+  6      h.histmsal
+  7  FROM
+  8      payroll.employee e
+  9      JOIN payroll.history h ON (
+ 10          e.empno = h.empno
+ 11      )
+ 12      JOIN payroll.department d ON (
+ 13          d.deptno = h.deptno
+ 14      )
+ 15  ORDER BY
+ 16      e.empname,
+ 17      h.histbegindate DESC;
+
+EMPNAME  DEPTNAME   HISTBEGIN           HISTEND                HISTMSAL
+-------- ---------- ------------------- -------------------- ----------
+ADAMS    TRAINING   01-Feb-017                                     1100
+ADAMS    TRAINING   01-Jan-017          01-Feb-2017                 950
+ALLEN    SALES      01-Nov-016                                     1600
+ALLEN    SALES      01-Oct-012          01-Nov-2016                1700
+ALLEN    SALES      01-Dec-010          01-Oct-2012                1500
+ALLEN    SALES      01-Jul-006          01-Dec-2010                1300
+ALLEN    SALES      01-Jun-005          01-Jul-2006                1000
+BLAKE    SALES      15-Oct-006                                     2850
+BLAKE    SALES      01-Jan-003          15-Oct-2006                2200
+BLAKE    SALES      15-Apr-002          01-Jan-2003                2100
+BLAKE    SALES      01-Jan-001          15-Apr-2002                1500
+BLAKE    SALES      01-Jan-000          01-Jan-2001                1275
+BLAKE    SALES      01-Jun-999          01-Jan-2000                 900
+CLARK    ACCOUNTING 01-Jul-005                                     2450
+FORD     TRAINING   01-Aug-017                                     3000
+FORD     SALES      01-Jan-017          01-Aug-2017                3000
+FORD     SALES      15-Mar-016          01-Jan-2017                2500
+FORD     SALES      01-Oct-015          15-Mar-2016                1650
+FORD     HR         01-Sep-015          01-Oct-2015                1400
+JONES    SALES      01-Jul-017                                      800
+JONES    TRAINING   15-Oct-016                                     2975
+JONES    TRAINING   01-Mar-012          15-Oct-2016                2750
+JONES    TRAINING   01-Sep-011          01-Mar-2012                2550
+JONES    TRAINING   01-Nov-009          01-Sep-2011                2600
+JONES    HR         01-Jul-009          01-Nov-2009                2450
+JONES    HR         01-Jun-006          01-Jul-2009                2300
+JONES    ACCOUNTING 01-Apr-004          01-Jun-2006                2300
+JONES    ACCOUNTING 15-Mar-004          01-Apr-2004                2200
+JONES    ACCOUNTING 01-Jul-003          15-Mar-2004                1175
+JONES    SALES      01-Jan-003          01-Jul-2003                1175
+JONES    SALES      15-Aug-001          01-Jan-2003                1000
+JONES    TRAINING   01-Dec-999          15-Aug-2001                 950
+JONES    TRAINING   01-Jan-999          01-Dec-1999                 900
+KING     ACCOUNTING 15-Feb-017                                     5000
+KING     ACCOUNTING 01-Nov-016          15-Feb-2017                4900
+KING     ACCOUNTING 01-Oct-015          01-Nov-2016                4800
+KING     ACCOUNTING 01-Oct-014          01-Oct-2015                4500
+KING     ACCOUNTING 01-Sep-012          01-Oct-2014                4200
+KING     ACCOUNTING 01-Dec-010          01-Sep-2012                3400
+KING     ACCOUNTING 15-Jun-006          01-Dec-2010                2900
+KING     ACCOUNTING 01-Feb-003          15-Jun-2006                2500
+KING     ACCOUNTING 01-Nov-002          01-Feb-2003                2200
+KING     ACCOUNTING 01-Jul-002          01-Nov-2002                2000
+KING     SALES      01-Jan-002          01-Jul-2002                1750
+KING     SALES      15-May-001          01-Jan-2002                1500
+KING     SALES      01-Aug-999          15-May-2001                1200
+KING     SALES      01-Jan-999          01-Aug-1999                1000
+MARTIN   SALES      15-Oct-016                                     1250
+MARTIN   SALES      01-Jan-016          15-Oct-2016                1100
+MILLER   ACCOUNTING 01-Jan-017                                     1300
+MILLER   ACCOUNTING 01-Feb-016          01-Jan-2017                1290
+MILLER   ACCOUNTING 01-May-015          01-Feb-2016                1280
+MILLER   ACCOUNTING 01-Feb-015          01-May-2015                1275
+SCOTT    TRAINING   01-Jun-017                                     3000
+SCOTT    TRAINING   01-Jul-016          01-Jun-2017                1800
+SCOTT    TRAINING   01-Jan-016          01-Jul-2016                1800
+SCOTT    TRAINING   01-Jan-015          01-Jan-2016                1700
+SCOTT    TRAINING   15-Oct-009          01-Jan-2015                1400
+SCOTT    TRAINING   01-Dec-006          15-Oct-2009                1350
+SCOTT    TRAINING   15-Feb-004          01-Dec-2006                1250
+SCOTT    TRAINING   01-May-003          15-Feb-2004                1800
+SCOTT    TRAINING   15-Apr-003          01-May-2003                1100
+SCOTT    HR         01-Jun-002          15-Apr-2003                1100
+SCOTT    HR         15-Apr-002          01-Jun-2002                 950
+SCOTT    TRAINING   01-Jan-000          15-Apr-2002                 950
+SCOTT    TRAINING   01-Jul-999          01-Jan-2000                 900
+SMITH    TRAINING   01-Feb-017                                      800
+SMITH    HR         01-Jan-017          01-Feb-2017                 950
+TURNER   SALES      01-Jan-017                                     1500
+TURNER   SALES      01-Nov-015          01-Jan-2017                1400
+TURNER   ACCOUNTING 15-Oct-015          01-Nov-2015                1200
+TURNER   SALES      01-May-012          01-Jan-2014                 900
+WARD     SALES      01-Feb-017                                     1250
+WARD     SALES      01-Oct-014          01-Feb-2017                1300
+WARD     TRAINING   01-Oct-011          01-Oct-2014                1250
+WARD     SALES      15-Dec-009          01-Oct-2011                1250
+WARD     SALES      01-Jan-006          15-Dec-2009                1150
+WARD     SALES      01-Aug-004          01-Jan-2006                1000
+WARD     TRAINING   01-Oct-003          01-Aug-2004                1000
+
+79 rows selected. 
+
+SQL> 
+SQL> --
+SQL> -- Q19. Display the employee name,empjob,monthly salary and annual salary of all employees.
+SQL> 
+SQL> SELECT
+  2      empname,
+  3      empjob,
+  4      empmsal,
+  5      empmsal * 12 AS "Annual Salary"
+  6  FROM
+  7      payroll.employee
+  8  ORDER BY empname;
+
+EMPNAME  EMPJOB      EMPMSAL Annual Salary
+-------- -------- ---------- -------------
+ADAMS    TRAINER        1100         13200
+ALLEN    SALESREP       1600         19200
+BLAKE    MANAGER        2850         34200
+CLARK    MANAGER        2450         29400
+FORD     TRAINER        3000         36000
+JONES    MANAGER        2975         35700
+JONES    ADMIN           800          9600
+KING     DIRECTOR       5000         60000
+MARTIN   SALESREP       1250         15000
+MILLER   ADMIN          1300         15600
+SCOTT    TRAINER        3000         36000
+SMITH    TRAINER         800          9600
+TURNER   SALESREP       1500         18000
+WARD     SALESREP       1250         15000
+
+14 rows selected. 
+
+SQL> 
+SQL> --
+SQL> -- Q20. Display the employee name,empjob,monthly salary, empcommission and annual income 
+SQL> -- (salary and empcommission) of all employees.
+SQL> 
+SQL> SELECT
+  2      empname,
+  3      empjob,
+  4      empmsal,
+  5      empcomm,
+  6      12 * (empmsal + nvl(empcomm,0)) AS "Annual Income"
+  7  FROM
+  8      payroll.employee
+  9  ORDER BY empname;
+
+EMPNAME  EMPJOB      EMPMSAL    EMPCOMM Annual Income
+-------- -------- ---------- ---------- -------------
+ADAMS    TRAINER        1100                    13200
+ALLEN    SALESREP       1600        300         22800
+BLAKE    MANAGER        2850                    34200
+CLARK    MANAGER        2450                    29400
+FORD     TRAINER        3000                    36000
+JONES    MANAGER        2975                    35700
+JONES    ADMIN           800                     9600
+KING     DIRECTOR       5000                    60000
+MARTIN   SALESREP       1250       1400         31800
+MILLER   ADMIN          1300                    15600
+SCOTT    TRAINER        3000                    36000
+SMITH    TRAINER         800                     9600
+TURNER   SALESREP       1500          0         18000
+WARD     SALESREP       1250        500         21000
+
+14 rows selected. 
+
+SQL> 
+SQL> set echo off
